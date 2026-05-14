@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabase } from "../lib/supabase";
+import MovieCard from "../components/MovieCard";
 
 export default function MoviesPage() {
     const [movies, setMovies] = useState([]);
@@ -40,16 +41,10 @@ export default function MoviesPage() {
 
             <div className="grid gap-4">
                 {movies.map((movie) => (
-                    <div
+                    <MovieCard
                         key={movie.id}
-                        className="border p-4 rounded"
-                    >
-                        <h2 className="font-bold">
-                            {movie.title}
-                        </h2>
-
-                        <p>{movie.director}</p>
-                    </div>
+                        movie={movie}
+                    />
                 ))}
             </div>
         </div>
