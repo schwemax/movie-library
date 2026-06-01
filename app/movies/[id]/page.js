@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { supabase } from "../../lib/supabase";
+import Link from "next/link";
 
 export default async function MovieDetail({ params }) {
     const { id } = params;
@@ -11,37 +11,49 @@ export default async function MovieDetail({ params }) {
         .single();
 
     if (!movie) {
-        return <h1>Movie not found</h1>;
+        return (
+            <div className="p-6">
+                <h1 className="text-2xl font-bold">
+                    Movie not found
+                </h1>
+            </div>
+        );
     }
 
     return (
-        <div className="p-6">
-            <h1 className="text-4xl font-bold mb-4">
+        <div className="p-6 max-w-xl mx-auto">
+            <Link
+                href="/movies"
+                className="text-blue-500"
+            >
+                ← Back
+            </Link>
+
+            <h1 className="text-4xl font-bold mt-4 mb-6">
                 {movie.title}
             </h1>
 
-            <p className="mb-2">
-                <strong>Director:</strong> {movie.director}
-            </p>
+            <div className="space-y-3">
+                <p>
+                    <strong>Director:</strong>{" "}
+                    {movie.director}
+                </p>
 
-            <p className="mb-2">
-                <strong>Year:</strong> {movie.year}
-            </p>
+                <p>
+                    <strong>Year:</strong>{" "}
+                    {movie.year}
+                </p>
 
-            <p className="mb-2">
-                <strong>Genre:</strong> {movie.genre}
-            </p>
+                <p>
+                    <strong>Genre:</strong>{" "}
+                    {movie.genre}
+                </p>
 
-            <p className="mb-4">
-                <strong>Rating:</strong> {movie.rating}
-            </p>
-
-            <Link
-                href={`/movies/${movie.id}/edit`}
-                className="bg-yellow-500 text-white px-4 py-2 rounded inline-block"
-            >
-                Edit Movie
-            </Link>
+                <p>
+                    <strong>Rating:</strong>{" "}
+                    {movie.rating}
+                </p>
+            </div>
         </div>
     );
 }

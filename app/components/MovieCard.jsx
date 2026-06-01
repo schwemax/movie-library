@@ -3,10 +3,11 @@ import Link from "next/link";
 export default function MovieCard({ movie }) {
     return (
         <div className="border p-4 rounded shadow">
-            <Link href={`/movies/${movie.id}`}>
-                <h2 className="text-xl font-bold hover:text-blue-500">
-                    {movie.title}
-                </h2>
+            <Link
+                href={`/movies/${movie.id}`}
+                className="text-xl font-bold text-blue-500"
+            >
+                {movie.title}
             </Link>
 
             <p>{movie.director}</p>
