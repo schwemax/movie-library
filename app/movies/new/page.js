@@ -1,34 +1,32 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { supabase } from "../../lib/supabase";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-
-const movieSchema = z.object({
-    title: z.string().min(2, "Title is too short"),
-    director: z.string().min(2, "Director is too short"),
-    year: z.coerce.number().min(1900),
-    genre: z.string().min(2),
-    rating: z.coerce.number().min(1).max(10),
-});
+import { supabase } from "../../lib/supabase";
 
 export default function NewMoviePage() {
     const router = useRouter();
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm({
-        resolver: zodResolver(movieSchema),
-    });
+    const [title, setTitle] = useState("");
+    const [director, setDirector] = useState("");
+    const [year, setYear] = useState("");
+    const [genre, setGenre] = useState("");
+    const [rating, setRating] = useState("");
 
-    async function onSubmit(data) {
+    async function handleSubmit(e) {
+        e.preventDefault();
+
         const { error } = await supabase
             .from("movies")
-            .insert([data]);
+            .insert([
+                {
+                    title,
+                    director,
+                    year,
+                    genre,
+                    rating,
+                },
+            ]);
 
         if (error) {
             console.log(error);
@@ -39,65 +37,55 @@ export default function NewMoviePage() {
     }
 
     return (
-        <div className="p-6 max-w-xl mx-auto">
-            <h1 className="text-3xl font-bold mb-6">
+        <div className="p-6 max-w-md mx-auto">
+            <h1 className="text-3xl font-bold mb-4">
                 Add Movie
             </h1>
 
             <form
-                onSubmit={handleSubmit(onSubmit)}
+                onSubmit={handleSubmit}
                 className="flex flex-col gap-4"
             >
                 <input
                     type="text"
                     placeholder="Title"
-                    {...register("title")}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                     className="border p-2 rounded"
                 />
-                <p className="text-red-500">
-                    {errors.title?.message}
-                </p>
 
                 <input
                     type="text"
                     placeholder="Director"
-                    {...register("director")}
+                    value={director}
+                    onChange={(e) => setDirector(e.target.value)}
                     className="border p-2 rounded"
                 />
-                <p className="text-red-500">
-                    {errors.director?.message}
-                </p>
 
                 <input
                     type="number"
                     placeholder="Year"
-                    {...register("year")}
+                    value={year}
+                    onChange={(e) => setYear(e.target.value)}
                     className="border p-2 rounded"
                 />
-                <p className="text-red-500">
-                    {errors.year?.message}
-                </p>
 
                 <input
                     type="text"
                     placeholder="Genre"
-                    {...register("genre")}
+                    value={genre}
+                    onChange={(e) => setGenre(e.target.value)}
                     className="border p-2 rounded"
                 />
-                <p className="text-red-500">
-                    {errors.genre?.message}
-                </p>
 
                 <input
                     type="number"
                     step="0.1"
                     placeholder="Rating"
-                    {...register("rating")}
+                    value={rating}
+                    onChange={(e) => setRating(e.target.value)}
                     className="border p-2 rounded"
                 />
-                <p className="text-red-500">
-                    {errors.rating?.message}
-                </p>
 
                 <button
                     type="submit"
