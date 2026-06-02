@@ -7,6 +7,7 @@ import MovieCard from "../components/MovieCard";
 
 export default function MoviesPage() {
     const [movies, setMovies] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         fetchMovies();
@@ -22,10 +23,11 @@ export default function MoviesPage() {
         }
 
         setMovies(data || []);
+        setLoading(false);
     }
 
     return (
-        <div className="p-6">
+        <div className="p-6 max-w-5xl mx-auto">
             <div className="flex justify-between mb-4">
                 <h1 className="text-3xl font-bold">
                     Movies
@@ -39,7 +41,19 @@ export default function MoviesPage() {
                 </Link>
             </div>
 
-            <div className="grid gap-4">
+            {loading && (
+                <p className="text-gray-500">
+                    Loading...
+                </p>
+            )}
+
+            {!loading && movies.length === 0 && (
+                <p className="text-gray-500">
+                    No movies found
+                </p>
+            )}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {movies.map((movie) => (
                     <div key={movie.id}>
                         <MovieCard movie={movie} />

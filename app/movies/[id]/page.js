@@ -10,6 +10,7 @@ export default function MovieDetail() {
     const params = useParams();
     const id = params.id;
     const [movie, setMovie] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function fetchMovie() {
@@ -20,6 +21,7 @@ export default function MovieDetail() {
                 .single();
 
             setMovie(data);
+            setLoading(false);
         }
 
         if (id) {
@@ -42,9 +44,19 @@ export default function MovieDetail() {
         router.push("/movies");
     }
 
+    if (loading) {
+        return (
+            <div className="p-6 max-w-xl mx-auto">
+                <p className="text-gray-500">
+                    Loading...
+                </p>
+            </div>
+        );
+    }
+
     if (!movie) {
         return (
-            <div className="p-6">
+            <div className="p-6 max-w-xl mx-auto">
                 <h1 className="text-2xl font-bold">
                     Movie not found
                 </h1>
