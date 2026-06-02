@@ -1,32 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabase";
+
+const movieSchema = z.object({
+    title: z.string().min(2, "Title is too short"),
+    director: z.string().min(2, "Director is too short"),
+    year: z.coerce.number().min(1900),
+    genre: z.string().min(2),
+    rating: z.coerce.number().min(1).max(10),
+});
 
 export default function NewMoviePage() {
     const router = useRouter();
 
-    const [title, setTitle] = useState("");
-    const [director, setDirector] = useState("");
-    const [year, setYear] = useState("");
-    const [genre, setGenre] = useState("");
-    const [rating, setRating] = useState("");
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        resolver: zodResolver(movieSchema),
+    });
 
-    async function handleSubmit(e) {
-        e.preventDefault();
-
+    async function onSubmit(data) {
         const { error } = await supabase
             .from("movies")
-            .insert([
-                {
-                    title,
-                    director,
-                    year,
-                    genre,
-                    rating,
-                },
-            ]);
+            .insert([data]);
 
         if (error) {
             console.log(error);
@@ -37,55 +39,80 @@ export default function NewMoviePage() {
     }
 
     return (
-        <div className="p-6 max-w-md mx-auto">
-            <h1 className="text-3xl font-bold mb-4">
+        <div className="p-6 max-w-xl mx-auto">
+            <h1 className="text-3xl font-bold mb-6">
                 Add Movie
             </h1>
 
             <form
-                onSubmit={handleSubmit}
+                onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col gap-4"
             >
-                <input
-                    type="text"
-                    placeholder="Title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    className="border p-2 rounded"
-                />
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Title"
+                        {...register("title")}
+                        className="border p-2 rounded w-full"
+                    />
 
-                <input
-                    type="text"
-                    placeholder="Director"
-                    value={director}
-                    onChange={(e) => setDirector(e.target.value)}
-                    className="border p-2 rounded"
-                />
+                    <p className="text-red-500">
+                        {errors.title?.message}
+                    </p>
+                </div>
 
-                <input
-                    type="number"
-                    placeholder="Year"
-                    value={year}
-                    onChange={(e) => setYear(e.target.value)}
-                    className="border p-2 rounded"
-                />
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Director"
+                        {...register("director")}
+                        className="border p-2 rounded w-full"
+                    />
 
-                <input
-                    type="text"
-                    placeholder="Genre"
-                    value={genre}
-                    onChange={(e) => setGenre(e.target.value)}
-                    className="border p-2 rounded"
-                />
+                    <p className="text-red-500">
+                        {errors.director?.message}
+                    </p>
+                </div>
 
-                <input
-                    type="number"
-                    step="0.1"
-                    placeholder="Rating"
-                    value={rating}
-                    onChange={(e) => setRating(e.target.value)}
-                    className="border p-2 rounded"
-                />
+                <div>
+                    <input
+                        type="number"
+                        placeholder="Year"
+                        {...register("year")}
+                        className="border p-2 rounded w-full"
+                    />
+
+                    <p className="text-red-500">
+                        {errors.year?.message}
+                    </p>
+                </div>
+
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Genre"
+                        {...register("genre")}
+                        className="border p-2 rounded w-full"
+                    />
+
+                    <p className="text-red-500">
+                        {errors.genre?.message}
+                    </p>
+                </div>
+
+                <div>
+                    <input
+                        type="number"
+                        step="0.1"
+                        placeholder="Rating"
+                        {...register("rating")}
+                        className="border p-2 rounded w-full"
+                    />
+
+                    <p className="text-red-500">
+                        {errors.rating?.message}
+                    </p>
+                </div>
 
                 <button
                     type="submit"
