@@ -41,10 +41,23 @@ export default function MoviesPage() {
 
             <div className="grid gap-4">
                 {movies.map((movie) => (
-                    <MovieCard
-                        key={movie.id}
-                        movie={movie}
-                    />
+                    <div key={movie.id}>
+                        <MovieCard movie={movie} />
+
+                        <Link
+                            href={`/movies/${movie.id}`}
+                            className="text-blue-500"
+                        >
+                            Detail
+                        </Link>
+
+                        <Link
+                            href={`/movies/${movie.id}/edit`}
+                            className="text-green-500 ml-4"
+                        >
+                            Edit
+                        </Link>
+                    </div>
                 ))}
             </div>
         </div>

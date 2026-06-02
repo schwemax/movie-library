@@ -1,14 +1,46 @@
-import { supabase } from "../../lib/supabase";
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import { supabase } from "../../lib/supabase";
 
-export default async function MovieDetail({ params }) {
-    const { id } = params;
+export default function MovieDetail() {
+    const router = useRouter();
+    const params = useParams();
+    const id = params.id;
+    const [movie, setMovie] = useState(null);
 
-    const { data: movie } = await supabase
-        .from("movies")
-        .select("*")
-        .eq("id", id)
-        .single();
+    useEffect(() => {
+        async function fetchMovie() {
+            const { data } = await supabase
+                .from("movies")
+                .select("*")
+                .eq("id", id)
+                .single();
+
+            setMovie(data);
+        }
+
+        if (id) {
+            fetchMovie();
+        }
+    }, [id]);
+
+    async function handleDelete() {
+        const confirmed = confirm(
+            "Are you sure?"
+        );
+
+        if (!confirmed) return;
+
+        await supabase
+            .from("movies")
+            .delete()
+            .eq("id", id);
+
+        router.push("/movies");
+    }
 
     if (!movie) {
         return (
@@ -26,7 +58,7 @@ export default async function MovieDetail({ params }) {
                 href="/movies"
                 className="text-blue-500"
             >
-                ← Back
+                Back
             </Link>
 
             <h1 className="text-4xl font-bold mt-4 mb-6">
@@ -53,6 +85,13 @@ export default async function MovieDetail({ params }) {
                     <strong>Rating:</strong>{" "}
                     {movie.rating}
                 </p>
+
+                <button
+                    onClick={handleDelete}
+                    className="bg-red-500 text-white px-4 py-2 rounded mt-4"
+                >
+                    Delete Movie
+                </button>
             </div>
         </div>
     );

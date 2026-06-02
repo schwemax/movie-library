@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
 
-export default function EditMoviePage({ params }) {
+export default function EditMoviePage() {
     const router = useRouter();
+    const params = useParams();
+    const id = params.id;
 
     const [movie, setMovie] = useState({
         title: "",
@@ -16,20 +18,28 @@ export default function EditMoviePage({ params }) {
     });
 
     useEffect(() => {
-        fetchMovie();
-    }, []);
+        async function fetchMovie() {
+            const { data } = await supabase
+                .from("movies")
+                .select("*")
+                .eq("id", id)
+                .single();
 
-    async function fetchMovie() {
-        const { data } = await supabase
-            .from("movies")
-            .select("*")
-            .eq("id", params.id)
-            .single();
-
-        if (data) {
-            setMovie(data);
+            if (data) {
+                setMovie({
+                    title: data.title || "",
+                    director: data.director || "",
+                    year: data.year || "",
+                    genre: data.genre || "",
+                    rating: data.rating || "",
+                });
+            }
         }
-    }
+
+        if (id) {
+            fetchMovie();
+        }
+    }, [id]);
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -37,14 +47,14 @@ export default function EditMoviePage({ params }) {
         const { error } = await supabase
             .from("movies")
             .update(movie)
-            .eq("id", params.id);
+            .eq("id", id);
 
         if (error) {
             console.log(error);
             return;
         }
 
-        router.push(`/movies/${params.id}`);
+        router.push(`/movies/${id}`);
     }
 
     return (
