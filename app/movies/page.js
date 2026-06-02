@@ -41,13 +41,7 @@ export default function MoviesPage() {
                 </Link>
             </div>
 
-            {loading && (
-                <p className="text-gray-500">
-                    Loading...
-                </p>
-            )}
-
-            {!loading && movies.length === 0 && (
+{movies.length === 0 && (
                 <p className="text-gray-500">
                     No movies found
                 </p>
