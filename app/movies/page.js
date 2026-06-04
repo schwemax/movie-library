@@ -14,16 +14,23 @@ export default function MoviesPage() {
     }, []);
 
     async function fetchMovies() {
-        const { data, error } = await supabase
-            .from("movies")
-            .select("*");
-
-        if (error) {
-            console.log(error);
+        setLoading(true);
+        try {
+            const { data, error } = await supabase
+                .from("movies")
+                .select("*");
+            console.log('supabase fetchMovies data:', data);
+            console.log('supabase fetchMovies error:', error);
+            if (error) {
+                setMovies([]);
+                throw error;
+            }
+            setMovies(data || []);
+        } catch (err) {
+            console.error('fetchMovies failed:', err);
+        } finally {
+            setLoading(false);
         }
-
-        setMovies(data || []);
-        setLoading(false);
     }
 
     return (
@@ -32,13 +39,6 @@ export default function MoviesPage() {
                 <h1 className="text-3xl font-bold">
                     Movies
                 </h1>
-
-                <Link
-                    href="/movies/new"
-                    className="bg-blue-500 text-white px-4 py-2 rounded"
-                >
-                    Add Movie
-                </Link>
             </div>
 
 {movies.length === 0 && (
@@ -47,25 +47,9 @@ export default function MoviesPage() {
                 </p>
             )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="movie-list">
                 {movies.map((movie) => (
-                    <div key={movie.id}>
-                        <MovieCard movie={movie} />
-
-                        <Link
-                            href={`/movies/${movie.id}`}
-                            className="text-blue-500"
-                        >
-                            Detail
-                        </Link>
-
-                        <Link
-                            href={`/movies/${movie.id}/edit`}
-                            className="text-green-500 ml-4"
-                        >
-                            Edit
-                        </Link>
-                    </div>
+                    <MovieCard key={movie.id} movie={movie} />
                 ))}
             </div>
         </div>

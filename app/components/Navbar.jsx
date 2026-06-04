@@ -1,35 +1,43 @@
+"use client";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Navbar() {
-    return (
-        <nav className="border-b bg-white">
-            <div className="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
-                <Link
-                    href="/"
-                    className="text-xl font-bold text-gray-900"
-                >
-                    Movie Library
-                </Link>
+    const [time, setTime] = useState("");
 
-                <div className="flex gap-4">
-                    <Link
-                        href="/"
-                        className="text-gray-600 hover:text-blue-500"
-                    >
+    useEffect(() => {
+        function update() {
+            const d = new Date();
+            setTime(d.toLocaleTimeString());
+        }
+        update();
+        const id = setInterval(update, 1000);
+        return () => clearInterval(id);
+    }, []);
+
+    return (
+        <nav className="navbar">
+            <div className="nav-inner container">
+                <div className="nav-left">
+                    <Link href="/" className="navbar-brand">
+                        Movie Library
+                    </Link>
+                </div>
+
+                <div className="nav-center">
+                    <div className="nav-clock" aria-live="polite">{time}</div>
+                </div>
+
+                <div className="nav-right">
+                    <Link href="/" className="nav-link">
                         Home
                     </Link>
 
-                    <Link
-                        href="/movies"
-                        className="text-gray-600 hover:text-blue-500"
-                    >
+                    <Link href="/movies" className="nav-link">
                         Movies
                     </Link>
 
-                    <Link
-                        href="/movies/new"
-                        className="text-gray-600 hover:text-blue-500"
-                    >
+                    <Link href="/movies/new" className="btn btn-primary">
                         Add Movie
                     </Link>
                 </div>

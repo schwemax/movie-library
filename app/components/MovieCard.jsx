@@ -2,19 +2,25 @@ import Link from "next/link";
 
 export default function MovieCard({ movie }) {
     return (
-        <div className="border bg-white p-4 rounded shadow hover:shadow-md transition">
-            <Link
-                href={`/movies/${movie.id}`}
-                className="text-xl font-bold text-blue-500"
-            >
-                {movie.title}
-            </Link>
+        <div className="movie-row">
+            <div className="movie-info">
+                <Link href={`/movies/${movie.id}`} className="movie-title">
+                    {movie.title}
+                </Link>
 
-            <p>{movie.director}</p>
+                <div className="movie-director">{movie.director}</div>
 
-            <p className="text-sm text-gray-500">
-                {movie.genre} - {movie.year}
-            </p>
+                <div className="movie-meta">
+                    {movie.genre && <span className="meta-tag">{movie.genre}</span>}
+                    {movie.year && <span className="meta-tag">{movie.year}</span>}
+                    {movie.rating != null && <span className="meta-rating">{movie.rating}</span>}
+                </div>
+            </div>
+
+            <div className="movie-actions">
+                <Link href={`/movies/${movie.id}`} className="btn btn-secondary">Detail</Link>
+                <Link href={`/movies/${movie.id}/edit`} className="btn btn-primary">Edit</Link>
+            </div>
         </div>
     );
 }

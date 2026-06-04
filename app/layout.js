@@ -1,5 +1,4 @@
 import Navbar from "./components/Navbar";
-import "./globals.css";
 
 export const metadata = {
   title: "Movie Library",
@@ -9,6 +8,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="stylesheet" href="/globals.css" />
+      </head>
       <body>
         <Navbar />
         <main>{children}</main>
