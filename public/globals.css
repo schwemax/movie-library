@@ -363,17 +363,18 @@ main {
 
 .btn:active { transform: translateY(1px); }
 
-/* Primary — dark pill */
+/* Primary — white pill */
 .btn-primary {
-    background: var(--text-900);
-    color: #fff;
+    background: #fff;
+    color: var(--text-900);
+    border: 1px solid var(--border);
     box-shadow: var(--shadow-btn);
 }
 
 .btn-primary:hover {
-    background: #1f2937;
-    box-shadow: 0 4px 14px rgba(13, 17, 23, 0.18);
-    color: #fff;
+    background: var(--surface-2);
+    box-shadow: 0 4px 14px rgba(13, 17, 23, 0.10);
+    color: var(--text-900);
     text-decoration: none;
 }
 
@@ -564,11 +565,27 @@ main {
 .mb-6          { margin-bottom: var(--space-3); }
 .ml-4          { margin-left: var(--space-2); }
 .p-4           { padding: var(--space-2); }
+.p-2           { padding: 0.5rem; }
 .p-6           { padding: var(--space-3); }
 .px-4          { padding-inline: var(--space-2); }
+.py-2          { padding-block: 0.5rem; }
 .text-sm       { font-size: 0.875rem; }
 .text-muted    { color: var(--text-muted); }
 .text-white    { color: #fff; }
+.bg-blue-500,
+.bg-green-500 {
+    background: #fff;
+    color: var(--text-900);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-btn);
+}
+
+.bg-blue-500:hover,
+.bg-green-500:hover {
+    background: var(--surface-2);
+    color: var(--text-900);
+    text-decoration: none;
+}
 /* Prevent accidental white-on-white: if an element with a white background (e.g. bg-white) contains .text-white, prefer readable dark text. */
 .bg-white .text-white { color: var(--text-900) !important; }
 .font-bold     { font-weight: 700; }
