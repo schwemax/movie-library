@@ -49,7 +49,15 @@ export default function MoviesPage() {
 
             <div className="movie-list">
                 {movies.map((movie) => (
-                    <MovieCard key={movie.id} movie={movie} />
+                    <MovieCard
+                        key={movie.id}
+                        movie={movie}
+                        onDeleted={(deletedId) =>
+                            setMovies((currentMovies) =>
+                                currentMovies.filter((currentMovie) => currentMovie.id !== deletedId)
+                            )
+                        }
+                    />
                 ))}
             </div>
         </div>

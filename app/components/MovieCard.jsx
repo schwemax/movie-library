@@ -1,6 +1,29 @@
-import Link from "next/link";
+"use client";
 
-export default function MovieCard({ movie }) {
+import Link from "next/link";
+import { supabase } from "../lib/supabase";
+
+export default function MovieCard({ movie, onDeleted }) {
+    async function handleDelete() {
+        const confirmed = window.confirm(`Delete "${movie.title}"?`);
+
+        if (!confirmed) {
+            return;
+        }
+
+        const { error } = await supabase
+            .from("movies")
+            .delete()
+            .eq("id", movie.id);
+
+        if (error) {
+            console.error("Delete failed:", error);
+            return;
+        }
+
+        onDeleted?.(movie.id);
+    }
+
     return (
         <div className="movie-row">
             <div className="movie-info">
@@ -20,6 +43,7 @@ export default function MovieCard({ movie }) {
             <div className="movie-actions">
                 <Link href={`/movies/${movie.id}`} className="btn btn-secondary">Detail</Link>
                 <Link href={`/movies/${movie.id}/edit`} className="btn btn-primary">Edit</Link>
+                <button type="button" className="btn btn-danger" onClick={handleDelete}>Delete</button>
             </div>
         </div>
     );
