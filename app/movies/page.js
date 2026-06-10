@@ -19,8 +19,7 @@ export default function MoviesPage() {
             const { data, error } = await supabase
                 .from("movies")
                 .select("*");
-            console.log('supabase fetchMovies data:', data);
-            console.log('supabase fetchMovies error:', error);
+
             if (error) {
                 setMovies([]);
                 throw error;
