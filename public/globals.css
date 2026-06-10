@@ -569,6 +569,8 @@ main {
 .text-sm       { font-size: 0.875rem; }
 .text-muted    { color: var(--text-muted); }
 .text-white    { color: #fff; }
+/* Prevent accidental white-on-white: if an element with a white background (e.g. bg-white) contains .text-white, prefer readable dark text. */
+.bg-white .text-white { color: var(--text-900) !important; }
 .font-bold     { font-weight: 700; }
 .rounded       { border-radius: var(--radius-md); }
 .mx-auto       { margin-inline: auto; }
