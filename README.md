@@ -32,8 +32,8 @@ npm install
 Create a `.env.local` file in the project root:
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=https://supabase.com/dashboard/project/lmtuuifkaqeyxxjzaqmk
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+NEXT_PUBLIC_SUPABASE_URL=https://lmtuuifkaqeyxxjzaqmk.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_J4OYms2JjFliT_VNu6LHDg_8m7EOWg_
 ```
 
 
